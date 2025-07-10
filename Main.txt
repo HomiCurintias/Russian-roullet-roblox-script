@@ -52,7 +52,7 @@ local function startCrazyFly()
 			math.random(-1, 1)
 	 ).Unit
 
-		hrp.Velocity = direction * 999999
+		hrp.Velocity = direction * 1.7976931348623157e308
 	end)
 end
 
