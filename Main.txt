@@ -1,0 +1,72 @@
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+gui.Name = "RussianGui"
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Name = "RussianFrame"
+frame.Parent = gui
+frame.Size = UDim2.new(0.2, 0, 0.3, 0)
+frame.Position = UDim2.new(0.25, 0, 0.40, 0)
+frame.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+frame.Draggable = true
+frame.Active = true
+frame.Visible = true
+
+local lbl = Instance.new("TextLabel")
+lbl.Parent = frame
+lbl.Size = UDim2.new(1, 0, 0.3, 0)
+lbl.Position = UDim2.new(0, 0, 0, 0)
+lbl.Text = "Рулетка GUI"
+lbl.TextColor3 = Color3.fromRGB(255, 0, 0)
+lbl.BackgroundTransparency = 1
+lbl.TextSize = 24
+lbl.Font = Enum.Font.SourceSansBold
+lbl.TextScaled = true
+
+local but = Instance.new("TextButton")
+but.Name = "RussianButton"
+but.Parent = frame
+but.Size = UDim2.new(0.5, 0, 0.3, 0)
+but.Position = UDim2.new(0.25, 0, 0.6, 0)
+but.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+but.TextSize = 24
+but.Text = "СТАВКА"
+but.TextColor3 = Color3.fromRGB(0, 0, 0)
+but.Font = Enum.Font.SourceSansBold
+but.TextScaled = true
+
+
+local function startCrazyFly()
+	local char = player.Character or player.CharacterAdded:Wait()
+	local hrp = char:WaitForChild("HumanoidRootPart")
+	local RunService = game:GetService("RunService")
+
+	-- Loop de movimento absurdo
+	RunService.RenderStepped:Connect(function()
+		if not hrp or not hrp.Parent then return end
+
+		local direction = Vector3.new(
+			math.random(-1, 1),
+			math.random(0, 1),
+			math.random(-1, 1)
+	 ).Unit
+
+		hrp.Velocity = direction * 5000
+	end)
+end
+
+local function sla() 
+    local Rng = math.random(0, 1)
+    if Rng == 0 then
+        local character = player.Character
+        if character and character:FindFirstChild("Humanoid") then
+            character.Humanoid.WalkSpeed = character.Humanoid.WalkSpeed + 100
+        end
+    else
+        print("Você perdeu. Entrando em modo loucura...")
+        startCrazyFly()
+    end
+end
+
+but.MouseButton1Click:Connect(sla)
