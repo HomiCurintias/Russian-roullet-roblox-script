@@ -43,46 +43,60 @@ local function startCrazyFly()
     local humanoid = char:WaitForChild("Humanoid")
     local RunService = game:GetService("RunService")
 
-    -- Alterando o corpo do personagem para ser afetado de maneira insana
-    humanoid.PlatformStand = true  -- Isso impede o humanoide de colidir com o solo normalmente
+    humanoid.PlatformStand = true
+    humanoid.WalkSpeed = 0
+    humanoid.JumpPower = 0
 
-    -- Loop de movimento extremo
+    local particles = Instance.new("ParticleEmitter")
+    particles.Parent = hrp
+    particles.Size = NumberSequence.new(10)
+    particles.Texture = "rbxassetid://119273366554250"
+    particles.Lifetime = NumberRange.new(1, 5)
+    particles.Rate = 1000
+    particles.Speed = NumberRange.new(50, 100)
+    particles.VelocityInheritance = 1
+
     RunService.RenderStepped:Connect(function()
         if not hrp or not hrp.Parent then return end
 
-        -- Movimentação completamente errática e muito rápida
         local direction = Vector3.new(
-            math.random(-1, 1),
-            math.random(1, 10),  -- Aumentando o valor de Y para elevar o personagem para cima
-            math.random(-1, 1)
+            math.random(-10, 10),
+            math.random(10, 50),
+            math.random(-10, 10)
         ).Unit
 
-        -- Aumentando a velocidade da "velocidade insana" que foi aplicada ao HumanoidRootPart
-        hrp.Velocity = direction * math.random(1, 100000)  -- Aumento do número para velocidade absurda
-        hrp.CFrame = hrp.CFrame + Vector3.new(math.random(-500, 500), math.random(-500, 500), math.random(-500, 500))  -- Nesse momento vc provavelmente ja estaria bandio KAKAKAK
-
-        -- Empurrando o personagem para fora do mapa com mais força
-        local force = Instance.new("BodyVelocity")
-        force.MaxForce = Vector3.new(1000000, 1000000, 1000000)  -- Esse e um dos maiores numeros que da pra atingir em LuaU mn
-        force.Velocity = Vector3.new(
-            math.random(-1000, 1000),  -- Movimentos mt loucos
-            math.random(1000, 5000),  -- tacando o boneco pro ar
+        hrp.Velocity = direction * math.random(100000, 500000)
+        hrp.CFrame = hrp.CFrame + Vector3.new(
+            math.random(-1000, 1000),
+            math.random(-1000, 2000),
             math.random(-1000, 1000)
         )
+
+        local force = Instance.new("BodyVelocity")
+        force.MaxForce = Vector3.new(10000000, 10000000, 10000000)
+        force.Velocity = Vector3.new(
+            math.random(-5000, 5000),
+            math.random(2000, 10000),
+            math.random(-5000, 5000)
+        )
         force.Parent = hrp
-        game.Debris:AddItem(force, 9999.1)  -- limpa tudo dps eu um tempo
+        game.Debris:AddItem(force, 0.1)
+
+        local sound = Instance.new("Sound")
+        sound.SoundId = "rbxassetid://142376088"
+        sound.Volume = 10
+        sound.Parent = hrp
+        sound:Play()
+        game.Debris:AddItem(sound, 1)
     end)
 end
 
 local function sla() 
     local Rng = math.random(0, 1)
     if Rng == 0 then
-        local character = player.Character
-        if character and character:FindFirstChild("Humanoid") then
-            character.Humanoid.WalkSpeed = character.Humanoid.WalkSpeed + 10
-        end
+        print("Você ganhou! Nada de loucura.")
     else
-        print("Voce perdeu e agora sera bandio")
+        print("Você perdeu. Entrando em modo loucura...")
         startCrazyFly()
     end
 end
